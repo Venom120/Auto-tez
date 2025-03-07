@@ -24,9 +24,9 @@ void getScreen(const int xx, const int yy, const int W, const int H, /*out*/ uns
             unsigned char red = (pixel & red_mask) >> 16;
             unsigned char green = (pixel & green_mask) >> 8;
             unsigned char blue = (pixel & blue_mask);
-            data[ii + 0] = red;
+            data[ii + 2] = red;
             data[ii + 1] = green;
-            data[ii + 2] = blue;
+            data[ii + 0] = blue;
             ii += 3;
         }
     }
