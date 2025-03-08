@@ -23,35 +23,6 @@ class Vision:
         # TM_CCOEFF, TM_CCOEFF_NORMED, TM_CCORR, TM_CCORR_NORMED, TM_SQDIFF, TM_SQDIFF_NORMED
         self.method = method
 
-    def find_multiple(self, haystack_img, threshold=0.8, debug_mode=None):
-        if len(haystack_img.shape) == 3:
-            haystack_img = cv.cvtColor(haystack_img, cv.COLOR_BGR2GRAY)
-
-        result = cv.matchTemplate(haystack_img, self.needle_img, self.method)
-
-        locations = np.where(result >= 0.8)
-        locations = list(zip(*locations[::-1]))
-        rectangles = []
-        for loc in locations:
-            rect = [int(loc[0]), int(loc[1]), int(loc[0] + self.needle_w), int(loc[1] + self.needle_h)]
-            # Add every box to the list twice in order to retain single (non-overlapping) boxes
-            rectangles.append(rect)
-            rectangles.append(rect)
-
-        rectangles, weights = cv.groupRectangles(rectangles, groupThreshold=1, eps=0.5)
-        if len(rectangles) == 0:
-            return None
-
-        # return rectangles[0]  # Return the top-left coordinate of the rectangle
-        max_loc = max(rectangles, key=lambda x: x[2] * x[3])
-        if debug_mode:
-            print(f"Needle found at ({max_loc[0]} {max_loc[1]}) till ({max_loc[2]} {max_loc[3]})")
-            # cv.imshow('Matches', haystack_img)
-            # cv.waitKey()
-            # cv.imwrite('result_click_point.jpg', haystack_img)
-        return max_loc
-
-
     def find(self, haystack_img, threshold=0.7, debug_mode=False, is_grayscale=False):
         if not is_grayscale:
             haystack_img = cv.cvtColor(haystack_img, cv.COLOR_BGR2GRAY)
