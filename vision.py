@@ -23,7 +23,7 @@ class Vision:
         # TM_CCOEFF, TM_CCOEFF_NORMED, TM_CCORR, TM_CCORR_NORMED, TM_SQDIFF, TM_SQDIFF_NORMED
         self.method = method
 
-    def find(self, haystack_img, threshold=0.8, debug_mode=None):
+    def find_multiple(self, haystack_img, threshold=0.8, debug_mode=None):
         if len(haystack_img.shape) == 3:
             haystack_img = cv.cvtColor(haystack_img, cv.COLOR_BGR2GRAY)
 
@@ -49,9 +49,33 @@ class Vision:
             # cv.imshow('Matches', haystack_img)
             # cv.waitKey()
             # cv.imwrite('result_click_point.jpg', haystack_img)
-
-
         return max_loc
+
+
+    def find(self, haystack_img, threshold=0.7, debug_mode=False, is_grayscale=False):
+        if not is_grayscale:
+            haystack_img = cv.cvtColor(haystack_img, cv.COLOR_BGR2GRAY)
+            
+        result = cv.matchTemplate(haystack_img, self.needle_img, self.method)
+
+        locations = np.where(result >= threshold)
+        locations = list(zip(*locations[::-1]))
+
+        if len(locations) == 0:
+            return None 
+        
+        loc=locations[0]
+        rect = [int(loc[0]), int(loc[1]), int(loc[0] + self.needle_w), int(loc[1] + self.needle_h)]
+
+        if debug_mode:
+            print(f"Needle found at ({rect[0]} {rect[1]}) till ({rect[2]} {rect[3]})")
+            # cv.imshow('Matches', haystack_img)
+            # cv.waitKey()
+            # cv.imwrite('result_click_point.jpg', haystack_img)
+
+        return rect
+    
+    
 
     def ball_crossed(self, img, threshold=40):
         # Convert to grayscale for faster processing

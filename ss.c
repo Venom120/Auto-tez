@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <X11/X.h>
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
@@ -8,7 +9,6 @@ void getScreen(const int xx, const int yy, const int W, const int H, /*out*/ uns
 {
     Display *display = XOpenDisplay(NULL);
     Window root = DefaultRootWindow(display);
-
     XImage *image = XGetImage(display, root, xx, yy, W, H, AllPlanes, ZPixmap);
 
     unsigned long red_mask = image->red_mask;
