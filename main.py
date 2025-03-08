@@ -1,5 +1,4 @@
-import time,cv2,subprocess,ctypes
-import numpy as np
+import time,cv2
 from vision import Vision
 from WindowCapture import Capturer
 
@@ -14,7 +13,13 @@ def display_fps(prev_time):
 GIVE THE PATH TO YOUR NEEDLE IMAGE HERE
 
 """
+"""
+
+GIVE THE PATH TO YOUR NEEDLE IMAGE HERE
+
+"""
 # Load and preprocess
+vision = Vision("data/ball_2.jpg")  # Load the needle image
 vision = Vision("data/ball_2.jpg")  # Load the needle image
 capturer = Capturer()
 
